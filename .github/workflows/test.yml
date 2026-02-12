@@ -1,0 +1,23 @@
+name: Test Action
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Test Main Branch Mode
+        uses: ./
+        with:
+          major-version: "1"
+          enable-prerelease: "false"
+
+      - name: Display Version
+        run: echo "Generated version would be created on merge to main"

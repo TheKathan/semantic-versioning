@@ -155,7 +155,7 @@ runs:
 
         COMMENT="## 📦 Version Preview
 
-This PR will create version: **\`$VERSION\`**
+This PR will create version: **${VERSION}**
 
 "
 

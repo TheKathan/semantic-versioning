@@ -214,6 +214,12 @@ runs:
         VERSION="${{ steps.version.outputs.version }}"
         IS_PRERELEASE="${{ steps.version.outputs.is_prerelease }}"
 
+        # Check if tag already exists
+        if git rev-parse "$VERSION" >/dev/null 2>&1; then
+          echo "Tag $VERSION already exists, skipping"
+          exit 0
+        fi
+
         git tag "$VERSION"
         git push origin "$VERSION"
 

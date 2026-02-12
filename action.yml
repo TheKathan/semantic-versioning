@@ -151,7 +151,7 @@ runs:
         echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
 
         # Add to job summary if enabled
-        if [[ "${{ inputs.add-to-summary }}" == "true" ]]; then
+        if [[ "${{ inputs.add-to-summary }}" == "true" ]] && ([[ "$BRANCH" == "main" ]] || [[ "${{ inputs.enable-prerelease }}" == "true" ]]); then
           echo "## 📦 Version: \`$VERSION\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Branch**: \`$BRANCH\`" >> $GITHUB_STEP_SUMMARY

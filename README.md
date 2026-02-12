@@ -121,31 +121,4 @@ GPL-3.0
 
 ## Contributing
 
-Contributions are welcome! Here's how you can help:
-
-### Reporting Issues
-- Found a bug? Open an issue with steps to reproduce
-- Have a feature request? Describe your use case
-- Documentation unclear? Let us know what's confusing
-
-### Pull Requests
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Make your changes
-4. Test your changes
-5. Commit your changes (`git commit -m 'Add some feature'`)
-6. Push to the branch (`git push origin feature/your-feature`)
-7. Open a Pull Request
-
-### Development
-- The action is a composite action defined in `action.yml`
-- Test changes by running the workflow in `.github/workflows/test.yml`
-- Follow conventional commit messages
-
-### Ideas for Contributions
-- Add support for more branch patterns
-- Improve documentation
-- Add examples for specific workflows
-- Report bugs or suggest improvements
-
-Open an issue or PR at [TheKathan/semantic-versioning](https://github.com/TheKathan/semantic-versioning)
+Found a bug or have an idea? Open an issue or submit a PR at [TheKathan/semantic-versioning](https://github.com/TheKathan/semantic-versioning)

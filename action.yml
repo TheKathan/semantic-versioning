@@ -163,7 +163,7 @@ runs:
         printf "## 📦 Version\n\nThe latest version for this PR has been tagged as **%s** (%s)\n" "$VERSION" "$TYPE" > comment-body.txt
 
         # Check if bot comment already exists
-        EXISTING_COMMENT=$(gh pr view ${{ github.event.pull_request.number }} --json comments --jq '.comments[] | select(.author.login == "github-actions" and (.body | contains("📦 Version"))) | .id' | head -1)
+        EXISTING_COMMENT=$(gh pr view ${{ github.event.pull_request.number }} --json comments --jq '.comments[] | select(.author.login == "github-actions[bot]" and (.body | contains("📦 Version"))) | .id' | head -1)
 
         if [[ -n "$EXISTING_COMMENT" ]]; then
           # Update existing comment

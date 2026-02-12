@@ -37,3 +37,12 @@ jobs:
         run: |
           echo "Created version: ${{ steps.version.outputs.version }}"
           echo "Is prerelease: ${{ steps.version.outputs.is-prerelease }}"
+
+      - name: Create GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.version.outputs.skip_tag != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create ${{ steps.version.outputs.version }} \
+            --title "Release ${{ steps.version.outputs.version }}" \
+            --generate-notes

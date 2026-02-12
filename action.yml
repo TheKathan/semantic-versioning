@@ -150,17 +150,31 @@ runs:
         echo "previous_version=$LATEST" >> $GITHUB_OUTPUT
         echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
 
-        # Add to job summary if enabled
-        if [[ "${{ inputs.add-to-summary }}" == "true" ]] && ([[ "$BRANCH" == "main" ]] || [[ "${{ inputs.enable-prerelease }}" == "true" ]]); then
-          echo "## 📦 Version: \`$VERSION\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Branch**: \`$BRANCH\`" >> $GITHUB_STEP_SUMMARY
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "- **Type**: Pre-release" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- **Type**: Release" >> $GITHUB_STEP_SUMMARY
-          fi
+
+    - name: Add to Job Summary
+      if: inputs.add-to-summary == 'true' && (github.ref == 'refs/heads/main' || inputs.enable-prerelease == 'true')
+      shell: bash
+      run: |
+        VERSION="${{ steps.version.outputs.version }}"
+        IS_PRERELEASE="${{ steps.version.outputs.is_prerelease }}"
+        BRANCH="${{ steps.version.outputs.branch }}"
+        PREVIOUS="${{ steps.version.outputs.previous_version }}"
+        BUMP="${{ steps.version.outputs.bump_type }}"
+
+        if [[ "$IS_PRERELEASE" == "true" ]]; then
+          TYPE="Pre-release"
+        else
+          TYPE="Release"
         fi
+
+        echo "## 📦 Version: **$VERSION**" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+        echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Type | $TYPE |" >> $GITHUB_STEP_SUMMARY
+        echo "| Branch | $BRANCH |" >> $GITHUB_STEP_SUMMARY
+        echo "| Bump | $BUMP |" >> $GITHUB_STEP_SUMMARY
+        echo "| Previous | $PREVIOUS |" >> $GITHUB_STEP_SUMMARY
 
     - name: Comment on PR
       if: inputs.comment-on-pr == 'true' && github.event_name == 'pull_request' && inputs.enable-prerelease == 'true'

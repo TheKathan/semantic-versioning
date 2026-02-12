@@ -33,9 +33,12 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
       run: |
+        set -x
         git fetch --all --tags --force
+        echo "Fetched tags"
 
-        CURRENT_TAG=$(git tag --points-at HEAD | grep -E "^v[0-9]" | sort -V | tail -n 1)
+        CURRENT_TAG=$(git tag --points-at HEAD | grep -E "^v[0-9]" | sort -V | tail -n 1 || true)
+        echo "Current tag: $CURRENT_TAG"
         if [ -n "$CURRENT_TAG" ]; then
           echo "version=$CURRENT_TAG" >> $GITHUB_OUTPUT
           echo "skip_tag=true" >> $GITHUB_OUTPUT
@@ -44,14 +47,19 @@ runs:
         fi
 
         BRANCH="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
-        LATEST=$(git tag | grep -E "^v${{ inputs.major-version }}\.[0-9]+\.[0-9]+$" | sort -V | tail -n 1)
+        echo "Branch: $BRANCH"
+
+        LATEST=$(git tag | grep -E "^v${{ inputs.major-version }}\.[0-9]+\.[0-9]+$" | sort -V | tail -n 1 || true)
         LATEST="${LATEST:-v${{ inputs.major-version }}.0.0}"
         IFS='.' read -r MAJ MIN PAT <<< "${LATEST#v}"
+        echo "Version base: $MAJ.$MIN.$PAT"
 
         if [[ "$BRANCH" == "main" ]]; then
+          echo "On main branch, checking PR source"
           SOURCE=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
             "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" | \
-            jq -r '.[0].head.ref // empty' || echo "")
+            jq -r '.[0].head.ref // empty' 2>/dev/null || echo "")
+          echo "PR source branch: $SOURCE"
 
           case "$SOURCE" in
             feature/*|feat/*) MIN=$((MIN + 1)); PAT=0 ;;

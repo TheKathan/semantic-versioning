@@ -2,6 +2,10 @@ name: "Trunk Semver"
 description: "Trunk-based semantic versioning. Automatic version bumps from branch naming patterns. Supports major, minor, patch bumps and pre-release tags."
 author: "TheKathan"
 
+branding:
+  icon: "package"
+  color: "green"
+
 inputs:
   major-version:
     description: "Major version number"
@@ -227,7 +231,3 @@ runs:
             git push origin "$MAJOR_TAG" --force
           fi
         fi
-
-branding:
-  icon: "package"
-  color: "green"

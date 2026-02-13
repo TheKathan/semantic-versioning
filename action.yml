@@ -1,5 +1,5 @@
 name: "Trunk Semver"
-description: "Trunk-based semantic versioning. Automatic version bumps from branch naming patterns. Supports major, minor, patch bumps and pre-release tags."
+description: "Automatic version bumps from branch names. Features bump minor, fixes bump patch. Optional pre-release support."
 author: "TheKathan"
 
 branding:
